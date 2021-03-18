@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="350" height="350" viewBox="0 0 350 350">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.844" y1="0.142" x2="0.075" y2="0.943" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#0cb8b6"/>
+      <stop offset="0.224" stop-color="#2ea3c0" stop-opacity="0.996"/>
+      <stop offset="0.747" stop-color="#816fd9" stop-opacity="0.984"/>
+      <stop offset="1" stop-color="#9f5de2" stop-opacity="0.98"/>
+    </linearGradient>
+    <clipPath id="clip-Logo_white_circle">
+      <rect width="350" height="350"/>
+    </clipPath>
+  </defs>
+  <g id="Logo_white_circle" data-name="Logo white circle" clip-path="url(#clip-Logo_white_circle)">
+    <circle id="Ellipse_1" data-name="Ellipse 1" cx="175" cy="175" r="175" fill="#fff"/>
+    <g id="DRO_Logo" data-name="DRO Logo" transform="translate(3.1 8.6)">
+      <path id="DRO" d="M46.274,0H108.44a123.4,123.4,0,0,1,123.4,123.4v0a123.4,123.4,0,0,1-123.4,123.4H46.274A46.274,46.274,0,0,1,0,200.521V46.274A46.274,46.274,0,0,1,46.274,0Z" transform="translate(56 43)" fill="url(#linear-gradient)"/>
+      <g id="Plus" transform="translate(77.329 198.795)">
+        <g id="Plus-2" data-name="Plus">
+          <path id="Path_1" data-name="Path 1" d="M91.928,343.527V317.52H74.113v26.007H48.24v17.811H74.113v25.733H91.928V361.338h25.864V343.527Z" transform="translate(-48.24 -317.52)" fill="#fff"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
