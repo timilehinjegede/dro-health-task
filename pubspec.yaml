@@ -11,8 +11,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   cupertino_icons: ^1.0.2
+  flutter_svg: ^0.19.3
 
 dev_dependencies:
   flutter_test:
@@ -27,7 +27,6 @@ flutter:
     - assets/images/logos/
     - assets/images/others/
 
-
   fonts:
     - family: Proxima Nova
       fonts:
@@ -36,4 +35,3 @@ flutter:
           weight: 700
         - asset: assets/fonts/Proxima-Nova-ExtraBold.otf
           weight: 900
-

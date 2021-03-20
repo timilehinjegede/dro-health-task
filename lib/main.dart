@@ -2,6 +2,8 @@ import 'package:dro_health/presentation/screens/medications/all_medication_scree
 import 'package:dro_health/utils/utils.dart';
 import 'package:flutter/material.dart';
 
+import 'presentation/screens/medications/checkout.dart';
+
 void main() {
   runApp(MyApp());
 }

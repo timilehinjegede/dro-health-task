@@ -27,15 +27,11 @@ ThemeData _buildDroHealthTheme() {
 TextTheme _buildDroHealthTextTheme(TextTheme base) {
   return base
       .copyWith(
-        headline5: base.headline5.copyWith(
+        headline6: base.headline6.copyWith(
           fontWeight: FontWeight.w500,
         ),
-        headline6: base.headline6.copyWith(
-          fontSize: 18,
-        ),
         caption: base.caption.copyWith(
-          fontWeight: FontWeight.w400,
-          fontSize: 14,
+          color: greyColor,
         ),
         bodyText1: base.bodyText1.copyWith(
           fontWeight: FontWeight.w500,
@@ -50,8 +46,6 @@ TextTheme _buildDroHealthTextTheme(TextTheme base) {
         ),
       )
       .apply(
-        displayColor: blackColor,
-        bodyColor: blackColor,
         fontFamily: ProximaNova,
       );
 }
