@@ -11,7 +11,7 @@ class AllMedicationRepository {
   Future<List<Medication>> fetchAllMedications() async {
     await Future.delayed(
       Duration(
-        seconds: _randomRange(1, 4),
+        seconds: _randomRange(1, 2),
       ),
     );
     List<Medication> medList = MedicationDataProvider.medicationList;

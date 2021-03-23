@@ -98,11 +98,16 @@ class MedicationDetailScreen extends StatelessWidget {
                       children: [
                         SvgPicture.asset(
                           bag,
+                          color: whiteColor,
                         ),
+                        XBox(3),
                         BlocBuilder<BagCubit, BagState>(
                           builder: (context, state) {
                             return Text(
                               state.bagItems.length.toString(),
+                              style: theme.textTheme.bodyText1.copyWith(
+                                color: whiteColor,
+                              ),
                             );
                           },
                         ),
@@ -157,6 +162,7 @@ class MedicationDetailScreen extends StatelessWidget {
                     children: [
                       SvgPicture.asset(
                         bag,
+                        color: whiteColor,
                       ),
                       XBox(5),
                       Text(
@@ -183,6 +189,7 @@ class _MedicationOverview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -200,9 +207,13 @@ class _MedicationOverview extends StatelessWidget {
         YBox(5),
         Text(
           medication.name,
+          style: theme.textTheme.headline6.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
         ),
         Text(
           medication.type,
+          style: theme.textTheme.bodyText1,
         ),
         YBox(20),
         Row(
@@ -226,9 +237,15 @@ class _MedicationOverview extends StatelessWidget {
               children: [
                 Text(
                   'SOLD BY',
+                  style: theme.textTheme.caption.copyWith(
+                    fontSize: 10,
+                  ),
                 ),
                 Text(
                   medication.sellerName,
+                  style: theme.textTheme.caption.copyWith(
+                    color: greenColor,
+                  ),
                 ),
               ],
             ),
@@ -264,6 +281,7 @@ class __PriceSectionState extends State<_PriceSection> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Row(
       children: [
         Container(
@@ -278,7 +296,10 @@ class __PriceSectionState extends State<_PriceSection> {
             children: [
               IconButton(
                 splashRadius: 20,
-                icon: Icon(Icons.remove),
+                icon: Icon(
+                  Icons.remove,
+                  color: blackColor.withOpacity(.8),
+                ),
                 onPressed: bagCubit.decreaseQuantity,
               ),
               SizedBox(
@@ -291,7 +312,10 @@ class __PriceSectionState extends State<_PriceSection> {
               ),
               IconButton(
                 splashRadius: 20,
-                icon: Icon(Icons.add),
+                icon: Icon(
+                  Icons.add,
+                  color: blackColor.withOpacity(.8),
+                ),
                 onPressed: bagCubit.increaseQuantity,
               ),
             ],
@@ -300,10 +324,15 @@ class __PriceSectionState extends State<_PriceSection> {
         XBox(10),
         Text(
           'Pack(s)',
+          style: theme.textTheme.caption,
         ),
         Spacer(),
         Text(
           '\u{20A6}${widget.medication.price}',
+          style: theme.textTheme.bodyText1.copyWith(
+            fontWeight: FontWeight.w600,
+            fontSize: 18,
+          ),
         ),
       ],
     );
@@ -317,11 +346,13 @@ class _ProductDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'PRODUCT DETAILS',
+          style: theme.textTheme.caption,
         ),
         YBox(10),
         Row(
@@ -340,10 +371,13 @@ class _ProductDetails extends StatelessWidget {
             Spacer(),
           ],
         ),
+        YBox(5),
         _ProductDetailsEntry(
-            assetSrc: pill,
-            info: 'CONSTITUENTS',
-            value: medication.constituents),
+          assetSrc: pill,
+          info: 'CONSTITUENTS',
+          value: medication.constituents,
+        ),
+        YBox(5),
         _ProductDetailsEntry(
           assetSrc: pillPack,
           info: 'DISPENSED IN',
@@ -353,6 +387,7 @@ class _ProductDetails extends StatelessWidget {
         Align(
           child: Text(
             '1 pack of ${medication.name} contains 3 unit(s) of 10 Tablet(s)',
+            style: theme.textTheme.caption,
             textAlign: TextAlign.center,
           ),
         ),
@@ -371,6 +406,7 @@ class _ProductDetailsEntry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Row(
       children: [
         Image.asset(
@@ -385,9 +421,16 @@ class _ProductDetailsEntry extends StatelessWidget {
           children: [
             Text(
               info,
+              style: theme.textTheme.caption.copyWith(fontSize: 10),
             ),
+            YBox(3),
             Text(
               value,
+              style: theme.textTheme.caption.copyWith(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: blackColor.withOpacity(0.85),
+              ),
             ),
           ],
         ),

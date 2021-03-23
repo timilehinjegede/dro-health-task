@@ -67,7 +67,9 @@ class _BuildHome extends StatelessWidget {
 
               Text(
                 '${medicationList.length} items',
-                style: theme.textTheme.subtitle1,
+                style: theme.textTheme.headline6.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
               ),
 
               YBox(10),
@@ -287,7 +289,7 @@ class _MedicationCard extends StatelessWidget {
             YBox(10),
             Text(
               medication.name,
-              style: theme.textTheme.subtitle1,
+              style: theme.textTheme.bodyText1,
             ),
             Text(
               medication.description,
@@ -310,6 +312,10 @@ class _MedicationCard extends StatelessWidget {
                 child: Center(
                   child: Text(
                     '\u{20A6}${medication.price}',
+                    style: theme.textTheme.caption.copyWith(
+                      color: whiteColor,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ),
@@ -343,6 +349,7 @@ class _ActionButton extends StatelessWidget {
         child: Center(
           child: SvgPicture.asset(
             assetSrc,
+            color: blackColor.withOpacity(0.8),
           ),
         ),
       ),

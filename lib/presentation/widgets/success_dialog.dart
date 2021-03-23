@@ -9,8 +9,9 @@ class SuccessDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
-      height: 280,
+      height: 282,
       color: transparentColor,
       padding: EdgeInsets.symmetric(horizontal: 20.0),
       child: Column(
@@ -30,12 +31,21 @@ class SuccessDialog extends StatelessWidget {
                   child: Align(
                     child: Text(
                       'Successful',
+                      style: theme.textTheme.bodyText1.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),
                 YBox(20),
-                Text(
-                  'Garlic Oil has been ${isRemoved ? 'removed' : 'added'} to your bag',
+                Align(
+                  child: Text(
+                    'Garlic Oil has been ${isRemoved ? 'removed' : 'added'} to your bag',
+                    style: theme.textTheme.bodyText1.copyWith(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
                 YBox(15),
                 _ActionButton(
@@ -100,6 +110,11 @@ class _ActionButton extends StatelessWidget {
       onPressed: onPressed,
       child: Text(
         title,
+        style: Theme.of(context).textTheme.bodyText1.copyWith(
+              fontWeight: FontWeight.w600,
+              color: whiteColor,
+              fontSize: 15,
+            ),
       ),
     );
   }

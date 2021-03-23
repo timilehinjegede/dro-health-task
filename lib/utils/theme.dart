@@ -34,14 +34,11 @@ TextTheme _buildDroHealthTextTheme(TextTheme base) {
         ),
         caption: base.caption.copyWith(
           color: greyColor,
+          fontSize: 13,
         ),
         bodyText1: base.bodyText1.copyWith(
-          fontWeight: FontWeight.w500,
           fontSize: 16,
         ),
-        bodyText2: base.bodyText2.copyWith(),
-        subtitle1: base.subtitle1.copyWith(),
-        headline4: base.headline4.copyWith(),
         button: base.button.copyWith(
           fontWeight: FontWeight.w500,
           fontSize: 14,

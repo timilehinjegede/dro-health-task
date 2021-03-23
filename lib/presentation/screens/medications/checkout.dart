@@ -9,6 +9,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 class CheckOutContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return BlocBuilder<BagCubit, BagState>(
       builder: (context, state) {
         return Padding(
@@ -29,8 +30,18 @@ class CheckOutContent extends StatelessWidget {
                 children: [
                   SvgPicture.asset(
                     bag,
+                    height: 25,
+                    width: 25,
+                    fit: BoxFit.cover,
+                    color: whiteColor,
                   ),
-                  Text('Bag'),
+                  XBox(5),
+                  Text(
+                    'Bag',
+                    style: theme.textTheme.headline6.copyWith(
+                      color: whiteColor,
+                    ),
+                  ),
                   Spacer(),
                   InkWell(
                     onTap: () {},
@@ -45,6 +56,7 @@ class CheckOutContent extends StatelessWidget {
                       child: Center(
                         child: Text(
                           state.bagItems.length.toString(),
+                          style: theme.textTheme.bodyText1,
                         ),
                       ),
                     ),
@@ -69,6 +81,10 @@ class CheckOutContent extends StatelessWidget {
                 child: Center(
                   child: Text(
                     'Tap on an item for add, remove, delete options',
+                    style: theme.textTheme.caption.copyWith(
+                      color: blackColor,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ),
@@ -82,9 +98,19 @@ class CheckOutContent extends StatelessWidget {
                 children: [
                   Text(
                     'Total',
+                    style: theme.textTheme.headline6.copyWith(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 22,
+                      color: whiteColor,
+                    ),
                   ),
                   Text(
                     '\u{20A6}6230',
+                    style: theme.textTheme.headline6.copyWith(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 22,
+                      color: whiteColor,
+                    ),
                   ),
                 ],
               ),
@@ -103,6 +129,10 @@ class CheckOutContent extends StatelessWidget {
                   ),
                   child: Text(
                     'Checkout',
+                    style: theme.textTheme.bodyText1.copyWith(
+                      color: blackColor,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ),

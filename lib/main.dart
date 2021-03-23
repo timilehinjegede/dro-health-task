@@ -28,6 +28,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'DroHealth',
         theme: droHealthThemeData,
         home: AllMedicationScreen(),
