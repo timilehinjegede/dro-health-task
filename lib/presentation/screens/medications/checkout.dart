@@ -1,119 +1,135 @@
 import 'package:dro_health/data/models/medication.dart';
+import 'package:dro_health/data/models/models.dart';
+import 'package:dro_health/logic/bag/cubit/bag_cubit.dart';
 import 'package:dro_health/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CheckOutContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0),
-      child: Column(
-        children: [
-          YBox(10),
-          Container(
-            height: 5,
-            width: 40,
-            decoration: BoxDecoration(
-              color: whiteColor,
-              borderRadius: BorderRadius.circular(5.0),
-            ),
-          ),
-          YBox(10),
-          Row(
+    return BlocBuilder<BagCubit, BagState>(
+      builder: (context, state) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+          child: Column(
             children: [
-              SvgPicture.asset(
-                bag,
+              YBox(10),
+              Container(
+                height: 5,
+                width: 40,
+                decoration: BoxDecoration(
+                  color: whiteColor,
+                  borderRadius: BorderRadius.circular(5.0),
+                ),
               ),
-              Text('Bag'),
-              Spacer(),
-              InkWell(
-                onTap: () {},
-                borderRadius: BorderRadius.circular(45 / 2),
-                child: Container(
-                  height: 45,
-                  width: 45,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: whiteColor,
+              YBox(10),
+              Row(
+                children: [
+                  SvgPicture.asset(
+                    bag,
                   ),
-                  child: Center(
-                    child: Text(
-                      '4',
+                  Text('Bag'),
+                  Spacer(),
+                  InkWell(
+                    onTap: () {},
+                    borderRadius: BorderRadius.circular(45 / 2),
+                    child: Container(
+                      height: 45,
+                      width: 45,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: whiteColor,
+                      ),
+                      child: Center(
+                        child: Text(
+                          state.bagItems.length.toString(),
+                        ),
+                      ),
                     ),
                   ),
+                ],
+              ),
+              YBox(25),
+              Container(
+                height: 22,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(11.0),
+                  color: whiteColor,
+                  boxShadow: [
+                    BoxShadow(
+                      offset: Offset(0, 4),
+                      color: blackColor.withOpacity(0.2),
+                      blurRadius: 5,
+                      spreadRadius: 2,
+                    ),
+                  ],
+                ),
+                child: Center(
+                  child: Text(
+                    'Tap on an item for add, remove, delete options',
+                  ),
                 ),
               ),
-            ],
-          ),
-          YBox(25),
-          Container(
-            height: 22,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(11.0),
-              color: whiteColor,
-              boxShadow: [
-                BoxShadow(
-                  offset: Offset(0, 4),
-                  color: blackColor.withOpacity(0.2),
-                  blurRadius: 5,
-                  spreadRadius: 2,
+              YBox(25),
+              _BagItemsSection(
+                bagItems: state.bagItems,
+              ),
+              Spacer(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Total',
+                  ),
+                  Text(
+                    '\u{20A6}6230',
+                  ),
+                ],
+              ),
+              YBox(15),
+              SizedBox(
+                height: 50,
+                width: double.infinity,
+                child: RaisedButton(
+                  color: whiteColor,
+                  textColor: blackColor,
+                  onPressed: () {
+                    print(state.bagItems);
+                  },
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  child: Text(
+                    'Checkout',
+                  ),
                 ),
-              ],
-            ),
-            child: Center(
-              child: Text(
-                'Tap on an item for add, remove, delete options',
               ),
-            ),
-          ),
-          YBox(25),
-          _BagItemsSection(),
-          Spacer(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Total',
-              ),
-              Text(
-                '\u{20A6}6230',
-              ),
+              Spacer(),
             ],
           ),
-          YBox(15),
-          SizedBox(
-            height: 50,
-            width: double.infinity,
-            child: RaisedButton(
-              color: whiteColor,
-              textColor: blackColor,
-              onPressed: () {},
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30.0),
-              ),
-              child: Text(
-                'Checkout',
-              ),
-            ),
-          ),
-          Spacer(),
-        ],
-      ),
+        );
+      },
     );
   }
 }
 
 class _BagItemsSection extends StatelessWidget {
+  final List<BagItem> bagItems;
+
+  const _BagItemsSection({Key key, this.bagItems}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         ...List.generate(
-          5,
+          bagItems.length,
           (index) => Column(
             children: [
               _BagItemEntry(
+                bagItem: bagItems[index],
                 onTap: () {},
               ),
               YBox(10),
@@ -126,10 +142,10 @@ class _BagItemsSection extends StatelessWidget {
 }
 
 class _BagItemEntry extends StatelessWidget {
-  final Medication medication;
+  final BagItem bagItem;
   final VoidCallback onTap;
 
-  const _BagItemEntry({Key key, this.medication, this.onTap}) : super(key: key);
+  const _BagItemEntry({Key key, this.bagItem, this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -149,7 +165,7 @@ class _BagItemEntry extends StatelessWidget {
                 shape: BoxShape.circle,
                 image: DecorationImage(
                   image: AssetImage(
-                    garlicAcid,
+                    bagItem.medication.imgSrc,
                   ),
                   fit: BoxFit.cover,
                 ),
@@ -157,23 +173,23 @@ class _BagItemEntry extends StatelessWidget {
             ),
             XBox(10),
             Text(
-              'x1',
+              'x${bagItem.quantity}',
             ),
             XBox(10),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Vitamin E 400',
+                  bagItem.medication.name,
                 ),
                 Text(
-                  'Capsule',
+                  bagItem.medication.type,
                 ),
               ],
             ),
             Spacer(),
             Text(
-              '\u{20A6}925',
+              '\u{20A6}${bagItem.medication.price * bagItem.quantity}',
             ),
           ],
         ),

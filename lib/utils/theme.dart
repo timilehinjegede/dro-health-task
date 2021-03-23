@@ -18,6 +18,8 @@ ThemeData _buildDroHealthTheme() {
     primaryColor: purpleColor,
     buttonColor: purpleColor,
     scaffoldBackgroundColor: whiteColor,
+    primaryColorLight: purpleColor,
+    accentColor: purpleColor,
     primaryIconTheme: IconThemeData().copyWith(color: blackColor),
     iconTheme: IconThemeData().copyWith(color: blackColor),
     textTheme: _buildDroHealthTextTheme(baseTheme.textTheme),

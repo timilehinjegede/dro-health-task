@@ -1,19 +1,77 @@
 import 'package:dro_health/data/models/models.dart';
+import 'package:dro_health/logic/all_medication/cubit/all_medication_cubit.dart';
 import 'package:dro_health/presentation/screens/medications/checkout.dart';
 import 'package:dro_health/presentation/screens/medications/medication_detail_screen.dart';
 import 'package:dro_health/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
-class AllMedicationScreen extends StatelessWidget {
+class AllMedicationScreen extends StatefulWidget {
+  @override
+  _AllMedicationScreenState createState() => _AllMedicationScreenState();
+}
+
+class _AllMedicationScreenState extends State<AllMedicationScreen> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<AllMedicationCubit>()..fetchAllMedications();
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      body: Stack(
-        children: [
-          Column(
+      body: BlocBuilder<AllMedicationCubit, AllMedicationState>(
+        builder: (context, state) {
+          switch (state.medicationState) {
+            case MedicationState.loading:
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+              break;
+            case MedicationState.success:
+              return _BuildHome(
+                medicationList: state.medicationList,
+              );
+              break;
+            case MedicationState.failure:
+            default:
+              return Center(
+                child: Text(
+                  'Unable to laod medications',
+                ),
+              );
+          }
+        },
+      ),
+    );
+  }
+}
+
+class _BuildHome extends StatelessWidget {
+  final List<Medication> medicationList;
+
+  const _BuildHome({Key key, this.medicationList}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Stack(
+      children: [
+        SafeArea(
+          child: Column(
             children: [
+              YBox(10),
+
+              Text(
+                '${medicationList.length} items',
+                style: theme.textTheme.subtitle1,
+              ),
+
+              YBox(10),
+
               // filter, sort and search options
               _HeaderSection(),
 
@@ -21,36 +79,38 @@ class AllMedicationScreen extends StatelessWidget {
 
               // medications
               Expanded(
-                child: _AllMedicationsSection(),
+                child: _AllMedicationsSection(
+                  medicationList: medicationList,
+                ),
               ),
             ],
           ),
-          DraggableScrollableSheet(
-            initialChildSize: 0.145,
-            minChildSize: 0.145,
-            builder: (_, scrollController) {
-              return SafeArea(
-                bottom: false,
-                child: SingleChildScrollView(
-                  controller: scrollController,
-                  child: Container(
-                    height: MediaQuery.of(context).size.height,
-                    decoration: BoxDecoration(
-                      color: darkPurpleColor,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30.0),
-                        topRight: Radius.circular(30.0),
-                      ),
+        ),
+        DraggableScrollableSheet(
+          initialChildSize: 0.145,
+          minChildSize: 0.145,
+          builder: (_, scrollController) {
+            return SafeArea(
+              bottom: false,
+              child: SingleChildScrollView(
+                controller: scrollController,
+                child: Container(
+                  height: MediaQuery.of(context).size.height,
+                  decoration: BoxDecoration(
+                    color: darkPurpleColor,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30.0),
+                      topRight: Radius.circular(30.0),
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 15.0),
-                    child: CheckOutContent(),
                   ),
+                  padding: EdgeInsets.symmetric(horizontal: 15.0),
+                  child: CheckOutContent(),
                 ),
-              );
-            },
-          ),
-        ],
-      ),
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 }
@@ -66,53 +126,62 @@ class __HeaderSectionState extends State<_HeaderSection> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return AnimatedContainer(
-      duration: Duration(milliseconds: 300),
-      height: isOpen ? 106 : 50,
+      duration: Duration(milliseconds: 200),
+      height: isOpen ? 106 : 55,
       width: double.infinity,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _ActionButton(
-                onTap: () {},
-                assetSrc: doubleArrows,
-              ),
-              _ActionButton(
-                onTap: () {},
-                assetSrc: filter,
-              ),
-              _ActionButton(
-                onTap: () {
-                  setState(() {
-                    isOpen = !isOpen;
-                  });
-                },
-                assetSrc: search,
-              ),
-            ],
+          SizedBox(
+            height: 45,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _ActionButton(
+                  onTap: () {},
+                  assetSrc: doubleArrows,
+                ),
+                _ActionButton(
+                  onTap: () {},
+                  assetSrc: filter,
+                ),
+                _ActionButton(
+                  onTap: () {
+                    setState(() {
+                      isOpen = !isOpen;
+                    });
+                  },
+                  assetSrc: search,
+                ),
+              ],
+            ),
           ),
           YBox(10),
           isOpen
-              ? Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        Icons.search,
-                      ),
-                      suffixIcon: Icon(
-                        Icons.close,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                        borderSide: BorderSide(
-                          width: 1,
-                          color: greyColor,
+              ? Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                    child: TextField(
+                      onChanged: (String val) {
+                        context.read<AllMedicationCubit>()
+                          ..searchAllMedications(val);
+                      },
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(
+                          Icons.search,
                         ),
+                        suffixIcon: Icon(
+                          Icons.close,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                          borderSide: BorderSide(
+                            width: 1,
+                            color: greyColor,
+                          ),
+                        ),
+                        isDense: true,
                       ),
-                      isDense: true,
                     ),
                   ),
                 )
@@ -124,36 +193,48 @@ class __HeaderSectionState extends State<_HeaderSection> {
 }
 
 class _AllMedicationsSection extends StatelessWidget {
+  final List<Medication> medicationList;
+
+  const _AllMedicationsSection({Key key, this.medicationList})
+      : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      padding: EdgeInsets.symmetric(horizontal: 15.0).add(
-        EdgeInsets.only(top: 5, bottom: 20.0),
-      ),
-      itemBuilder: (_, int index) {
-        return _MedicationCard(
-          index: index,
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => MedicationDetailScreen(
-                  medication: null,
-                  heroTag: 'heroTag$index',
-                ),
-              ),
-            );
-          },
-        );
-      },
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-        childAspectRatio: 0.65,
-      ),
-      itemCount: 8,
-    );
+    return medicationList.isEmpty
+        ? Center(
+            child: Text(
+              'No available medications found',
+            ),
+          )
+        : GridView.builder(
+            padding: EdgeInsets.symmetric(horizontal: 15.0).add(
+              EdgeInsets.only(top: 5, bottom: 80.0),
+            ),
+            itemBuilder: (_, int index) {
+              return _MedicationCard(
+                medication: medicationList[index],
+                index: index,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => MedicationDetailScreen(
+                        medication: medicationList[index],
+                        heroTag: 'heroTag$index',
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              childAspectRatio: 0.65,
+            ),
+            itemCount: medicationList.length,
+          );
   }
 }
 
@@ -194,7 +275,9 @@ class _MedicationCard extends StatelessWidget {
                 width: 150,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage(kezitilSusp),
+                    image: AssetImage(
+                      medication.imgSrc,
+                    ),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -203,15 +286,15 @@ class _MedicationCard extends StatelessWidget {
             ),
             YBox(10),
             Text(
-              'Kezitil Susp',
+              medication.name,
               style: theme.textTheme.subtitle1,
             ),
             Text(
-              'Cerufutmsill Kezitil Susp',
+              medication.description,
               style: theme.textTheme.caption,
             ),
             Text(
-              'Oral Suspendsion - 100mg',
+              medication.type,
               style: theme.textTheme.caption,
             ),
             YBox(5),
@@ -226,7 +309,7 @@ class _MedicationCard extends StatelessWidget {
                 ),
                 child: Center(
                   child: Text(
-                    '\u{20A6}1440',
+                    '\u{20A6}${medication.price}',
                   ),
                 ),
               ),
