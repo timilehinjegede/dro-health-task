@@ -23,9 +23,9 @@ class AllMedicationRepository {
     List<Medication> medList = [];
     medList = MedicationDataProvider.medicationList
         .where(
-          (medication) => medication.name.contains(
-            medicationName,
-          ),
+          (medication) => medication.name.toLowerCase().contains(
+                medicationName.toLowerCase(),
+              ),
         )
         .toList();
 

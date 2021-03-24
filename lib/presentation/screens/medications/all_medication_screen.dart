@@ -66,7 +66,7 @@ class _BuildHome extends StatelessWidget {
               YBox(10),
 
               Text(
-                '${medicationList.length} items',
+                '${medicationList.length} ${medicationList.length > 1 ? 'items' : 'item'}',
                 style: theme.textTheme.headline6.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
@@ -122,74 +122,84 @@ class _HeaderSection extends StatefulWidget {
   __HeaderSectionState createState() => __HeaderSectionState();
 }
 
-class __HeaderSectionState extends State<_HeaderSection> {
+class __HeaderSectionState extends State<_HeaderSection>
+    with TickerProviderStateMixin {
   bool isOpen = true;
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 200),
-      height: isOpen ? 106 : 55,
-      width: double.infinity,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          SizedBox(
-            height: 45,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _ActionButton(
-                  onTap: () {},
-                  assetSrc: doubleArrows,
-                ),
-                _ActionButton(
-                  onTap: () {},
-                  assetSrc: filter,
-                ),
-                _ActionButton(
-                  onTap: () {
-                    setState(() {
-                      isOpen = !isOpen;
-                    });
-                  },
-                  assetSrc: search,
-                ),
-              ],
-            ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          height: 45,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _ActionButton(
+                onTap: () {},
+                assetSrc: doubleArrows,
+              ),
+              _ActionButton(
+                onTap: () {},
+                assetSrc: filter,
+              ),
+              _ActionButton(
+                onTap: () {
+                  setState(() {
+                    isOpen = !isOpen;
+                  });
+                },
+                assetSrc: search,
+              ),
+            ],
           ),
-          YBox(10),
-          isOpen
-              ? Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                    child: TextField(
-                      onChanged: (String val) {
-                        context.read<AllMedicationCubit>()
-                          ..searchAllMedications(val);
-                      },
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(
-                          Icons.search,
-                        ),
-                        suffixIcon: Icon(
-                          Icons.close,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30.0),
-                          borderSide: BorderSide(
-                            width: 1,
-                            color: greyColor,
+        ),
+        AnimatedSize(
+          duration: Duration(milliseconds: 300),
+          vsync: this,
+          child: isOpen
+              ? Column(
+                  children: [
+                    YBox(10),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: TextField(
+                        onChanged: (String val) {
+                          context.read<AllMedicationCubit>()
+                            ..searchAllMedications(val);
+                        },
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.search,
                           ),
+                          suffixIcon: InkWell(
+                            borderRadius: BorderRadius.circular(20.0),
+                            onTap: () {
+                              setState(() {
+                                isOpen = !isOpen;
+                              });
+                            },
+                            child: Icon(
+                              Icons.close,
+                            ),
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                            borderSide: BorderSide(
+                              width: 1,
+                              color: greyColor,
+                            ),
+                          ),
+                          isDense: true,
                         ),
-                        isDense: true,
                       ),
                     ),
-                  ),
+                  ],
                 )
               : SizedBox.shrink(),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -311,7 +321,7 @@ class _MedicationCard extends StatelessWidget {
                 ),
                 child: Center(
                   child: Text(
-                    '\u{20A6}${medication.price}',
+                    formatMoney(medication.price),
                     style: theme.textTheme.caption.copyWith(
                       color: whiteColor,
                       fontWeight: FontWeight.w600,

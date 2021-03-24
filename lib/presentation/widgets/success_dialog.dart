@@ -1,6 +1,8 @@
+import 'package:dro_health/logic/bag/cubit/bag_cubit.dart';
 import 'package:dro_health/utils/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SuccessDialog extends StatelessWidget {
   final bool isRemoved;
@@ -10,8 +12,9 @@ class SuccessDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final bagCubit = BlocProvider.of<BagCubit>(context);
     return Container(
-      height: 282,
+      height: 300,
       color: transparentColor,
       padding: EdgeInsets.symmetric(horizontal: 20.0),
       child: Column(
@@ -40,11 +43,12 @@ class SuccessDialog extends StatelessWidget {
                 YBox(20),
                 Align(
                   child: Text(
-                    'Garlic Oil has been ${isRemoved ? 'removed' : 'added'} to your bag',
+                    '${bagCubit.state.bagItem.medication.name} has been ${isRemoved ? 'removed' : 'added'} to your bag',
                     style: theme.textTheme.bodyText1.copyWith(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                     ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
                 YBox(15),
@@ -64,7 +68,7 @@ class SuccessDialog extends StatelessWidget {
             ),
           ),
           FractionalTranslation(
-            translation: Offset(0, -4.15),
+            translation: Offset(0, -4.4),
             child: Container(
               height: 60,
               width: 60,

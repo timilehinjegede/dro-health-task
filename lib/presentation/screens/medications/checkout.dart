@@ -10,6 +10,7 @@ class CheckOutContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final _bagCubit = BlocProvider.of<BagCubit>(context);
     return BlocBuilder<BagCubit, BagState>(
       builder: (context, state) {
         return Padding(
@@ -105,7 +106,9 @@ class CheckOutContent extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    '\u{20A6}6230',
+                    formatMoney(
+                      _bagCubit.getTotalPrice(),
+                    ),
                     style: theme.textTheme.headline6.copyWith(
                       fontWeight: FontWeight.w600,
                       fontSize: 22,
@@ -145,22 +148,40 @@ class CheckOutContent extends StatelessWidget {
   }
 }
 
-class _BagItemsSection extends StatelessWidget {
+class _BagItemsSection extends StatefulWidget {
   final List<BagItem> bagItems;
 
   const _BagItemsSection({Key key, this.bagItems}) : super(key: key);
 
   @override
+  __BagItemsSectionState createState() => __BagItemsSectionState();
+}
+
+class __BagItemsSectionState extends State<_BagItemsSection> {
+  int _selectedIndex = -1;
+  @override
   Widget build(BuildContext context) {
+    final _bagCubit = BlocProvider.of<BagCubit>(context);
     return Column(
       children: [
         ...List.generate(
-          bagItems.length,
+          widget.bagItems.length,
           (index) => Column(
             children: [
               _BagItemEntry(
-                bagItem: bagItems[index],
-                onTap: () {},
+                bagItem: widget.bagItems[index],
+                onTap: () {
+                  _bagCubit.getBagItem(widget.bagItems[index].medication);
+                  setState(() {
+                    if (_selectedIndex == index) {
+                      _selectedIndex = -1;
+                    } else {
+                      _selectedIndex = index;
+                    }
+                  });
+                },
+                index: index,
+                isSelected: index == _selectedIndex,
               ),
               YBox(10),
             ],
@@ -171,57 +192,182 @@ class _BagItemsSection extends StatelessWidget {
   }
 }
 
-class _BagItemEntry extends StatelessWidget {
+class _BagItemEntry extends StatefulWidget {
   final BagItem bagItem;
   final VoidCallback onTap;
+  final bool isSelected;
+  final int index;
 
-  const _BagItemEntry({Key key, this.bagItem, this.onTap}) : super(key: key);
+  const _BagItemEntry({
+    Key key,
+    this.bagItem,
+    this.onTap,
+    this.isSelected,
+    this.index,
+  }) : super(key: key);
+
+  @override
+  __BagItemEntryState createState() => __BagItemEntryState();
+}
+
+class __BagItemEntryState extends State<_BagItemEntry>
+    with TickerProviderStateMixin {
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final _bagCubit = BlocProvider.of<BagCubit>(context);
+    return BlocBuilder<BagCubit, BagState>(
+      builder: (context, state) {
+        return AnimatedContainer(
+          duration: Duration(milliseconds: 300),
+          child: Column(
+            children: [
+              InkWell(
+                onTap: widget.onTap,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                          color: whiteColor,
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: AssetImage(
+                              widget.bagItem.medication.imgSrc,
+                            ),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      XBox(10),
+                      Text(
+                        'x${state.bagItems[widget.index].quantity}',
+                        style: theme.textTheme.caption.copyWith(
+                          color: whiteColor,
+                          fontSize: 15,
+                        ),
+                      ),
+                      XBox(10),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            state.bagItems[widget.index].medication.name,
+                            style: theme.textTheme.bodyText1.copyWith(
+                              color: whiteColor,
+                            ),
+                          ),
+                          YBox(2),
+                          Text(
+                            state.bagItems[widget.index].medication.type,
+                            style: theme.textTheme.caption.copyWith(
+                              color: whiteColor,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Spacer(),
+                      Text(
+                        formatMoney(
+                          state.bagItems[widget.index].medication.price *
+                              state.bagItems[widget.index].quantity,
+                        ),
+                        style: theme.textTheme.bodyText1.copyWith(
+                          color: whiteColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              YBox(3),
+              AnimatedSize(
+                alignment: Alignment.topCenter,
+                duration: Duration(
+                  milliseconds: 400,
+                ),
+                curve: Curves.easeInOut,
+                vsync: this,
+                child: widget.isSelected
+                    ? Row(
+                        children: [
+                          IconButton(
+                            icon: Icon(
+                              Icons.delete_rounded,
+                              color: whiteColor,
+                              size: 30,
+                            ),
+                            onPressed: () =>
+                                _bagCubit.removeItemFromBag(widget.bagItem),
+                          ),
+                          Spacer(),
+                          _ActionButton(
+                            title: '-',
+                            onTap: () =>
+                                _bagCubit.decreaseItemQuantity(widget.bagItem),
+                          ),
+                          XBox(5),
+                          SizedBox(
+                            width: 20,
+                            child: Center(
+                              child: Text(
+                                state.bagItems[widget.index].quantity
+                                    .toString(),
+                                style: theme.textTheme.bodyText1.copyWith(
+                                  color: whiteColor,
+                                ),
+                              ),
+                            ),
+                          ),
+                          XBox(5),
+                          _ActionButton(
+                            title: '+',
+                            onTap: () =>
+                                _bagCubit.increaseItemQuantity(widget.bagItem),
+                          ),
+                        ],
+                      )
+                    : SizedBox.shrink(),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _ActionButton extends StatelessWidget {
+  final String title;
+  final VoidCallback onTap;
+
+  const _ActionButton({
+    Key key,
+    @required this.title,
+    this.onTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
-      borderRadius: BorderRadius.circular(10.0),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 5.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              height: 50,
-              width: 50,
-              decoration: BoxDecoration(
-                color: whiteColor,
-                shape: BoxShape.circle,
-                image: DecorationImage(
-                  image: AssetImage(
-                    bagItem.medication.imgSrc,
-                  ),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            XBox(10),
-            Text(
-              'x${bagItem.quantity}',
-            ),
-            XBox(10),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  bagItem.medication.name,
-                ),
-                Text(
-                  bagItem.medication.type,
-                ),
-              ],
-            ),
-            Spacer(),
-            Text(
-              '\u{20A6}${bagItem.medication.price * bagItem.quantity}',
-            ),
-          ],
+      onTap: onTap,
+      child: Container(
+        height: 35,
+        width: 35,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: whiteColor,
+        ),
+        child: Center(
+          child: Icon(
+            title == '+' ? Icons.add : Icons.remove,
+            color: purpleColor,
+          ),
         ),
       ),
     );

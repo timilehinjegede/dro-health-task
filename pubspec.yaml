@@ -16,10 +16,17 @@ dependencies:
   equatable: ^2.0.0
   flutter_bloc: ^7.0.0
   flutter_svg: ^0.19.3
+  flutter_launcher_icons: ^0.8.0
+  flutter_money_formatter: ^0.8.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/logos/dro_health.png"
 
 flutter:
   uses-material-design: true

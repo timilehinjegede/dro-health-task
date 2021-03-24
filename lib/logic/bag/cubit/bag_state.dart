@@ -2,29 +2,26 @@ part of 'bag_cubit.dart';
 
 enum ItemState { initial, added, removed }
 
-class BagState extends Equatable {
-  const BagState({
-    this.bagItems = const <BagItem>[],
+class BagState {
+  final ItemState itemState;
+  final BagItem bagItem;
+  final List<BagItem> bagItems;
+
+  BagState({
     this.itemState = ItemState.initial,
-    this.quantity = 0,
+    this.bagItem = const BagItem(quantity: 0),
+    this.bagItems = const <BagItem>[],
   });
 
-  final List<BagItem> bagItems;
-  final ItemState itemState;
-  final int quantity;
-
   BagState copyWith({
-    final List<BagItem> bagItems,
     final ItemState itemState,
-    final int quantity,
+    final BagItem bagItem,
+    final List<BagItem> bagItems,
   }) {
     return BagState(
-      bagItems: bagItems ?? this.bagItems,
       itemState: itemState ?? this.itemState,
-      quantity: quantity ?? this.quantity,
+      bagItem: bagItem ?? this.bagItem,
+      bagItems: bagItems ?? this.bagItems,
     );
   }
-
-  @override
-  List<Object> get props => [bagItems, itemState];
 }

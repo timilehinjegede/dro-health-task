@@ -1,4 +1,7 @@
+import 'dart:collection';
+
 import 'package:bloc/bloc.dart';
+import 'package:dro_health/data/data_providers/medications.dart';
 import 'package:dro_health/data/models/models.dart';
 import 'package:equatable/equatable.dart';
 
@@ -7,108 +10,197 @@ part 'bag_state.dart';
 class BagCubit extends Cubit<BagState> {
   BagCubit() : super(BagState());
 
-  List<BagItem> itemBagList = [];
-
-  void addToBag(Medication medication) {
-    // check if the product is already in bag
-    // check if the quantity is 0
-    final isMedicationInBag = itemBagList.any(
-      (itemBag) => itemBag.medication == medication,
-    );
-
-    if (isMedicationInBag) {
-      // modify exisiting medication in the bag
-      final BagItem bagItem = itemBagList.firstWhere(
-        (itemBag) => itemBag.medication == medication,
+  // get
+  void getBagItem(Medication med) {
+    if (state.bagItems.isNotEmpty) {
+      final bool itemExists = state.bagItems.any(
+        (item) => item.medication.name == med.name,
       );
-
-      if (state.quantity != 0) {
-        bagItem.quantity = state.quantity;
-        int index = itemBagList.indexOf(bagItem);
-        itemBagList[index] = bagItem;
+      if (itemExists) {
+        final bagItem = state.bagItems.firstWhere(
+          (element) => element.medication.name == med.name,
+        );
+        List<BagItem> newBagItemList = [...state.bagItems];
+        int index = newBagItemList.indexOf(bagItem);
+        newBagItemList[index] = bagItem;
         emit(
           state.copyWith(
-            itemState: ItemState.added,
-            bagItems: itemBagList,
+            bagItems: newBagItemList,
+            bagItem: bagItem,
+            itemState: ItemState.initial,
           ),
         );
-        // remove from bag if quantity is less than zero
       } else {
-        final BagItem bagItem = itemBagList.firstWhere(
-          (itemBag) => itemBag.medication == medication,
-        );
-        itemBagList.remove(bagItem);
         emit(
           state.copyWith(
-            itemState: ItemState.removed,
-            bagItems: itemBagList,
+            bagItem: BagItem(medication: med, quantity: 0),
+            itemState: ItemState.initial,
           ),
         );
       }
     } else {
-      // create a new bag item if medication is not in bag
-      BagItem bagItem = BagItem(
-        medication: medication,
-        quantity: state.quantity,
-      );
-
       emit(
         state.copyWith(
-          itemState: ItemState.added,
-          bagItems: itemBagList..add(bagItem),
-        ),
-      );
-    }
-  }
-
-  // increase the quantity of an item
-  void increaseQuantity() {
-    var newQuantity = state.quantity + 1;
-    print(newQuantity);
-    emit(
-      state.copyWith(
-        quantity: newQuantity,
-        itemState: ItemState.initial,
-      ),
-    );
-  }
-
-  // increase the quantity of an item
-  void decreaseQuantity() {
-    if (state.quantity >= 1) {
-      var newQuantity = state.quantity - 1;
-      emit(
-        state.copyWith(
-          quantity: newQuantity,
+          bagItem: BagItem(medication: med, quantity: 0),
           itemState: ItemState.initial,
         ),
       );
     }
   }
 
-  void resetToInitial() {
-    emit(
-      state.copyWith(
-        quantity: 0,
-        itemState: ItemState.initial,
-      ),
-    );
+  // add
+  void addItemToBag(Medication med) {
+    final bool itemExists =
+        state.bagItems.any((item) => item.medication.name == med.name);
+
+    if (itemExists) {
+      if (state.bagItem.quantity != 0) {
+        final bagItem = state.bagItems.firstWhere(
+          (element) => element.medication.name == med.name,
+        );
+        final List<BagItem> newBagItemList = [...state.bagItems];
+        int index = newBagItemList.indexOf(bagItem);
+        state.bagItem.copyWith(
+          quantity: state.bagItem.quantity,
+        );
+
+        newBagItemList[index] = state.bagItem;
+        emit(
+          state.copyWith(
+            bagItems: newBagItemList,
+            bagItem: state.bagItem,
+            itemState: ItemState.added,
+          ),
+        );
+      } else {
+        removeItemFromBag(state.bagItem);
+      }
+    } else {
+      if (state.bagItem.quantity != 0) {
+        List<BagItem> newBagList = [...state.bagItems];
+        newBagList.add(state.bagItem);
+        emit(
+          state.copyWith(
+            bagItems: newBagList,
+            itemState: ItemState.added,
+          ),
+        );
+      }
+    }
   }
 
-  void removeItemFromBag(Medication medication) {
-    final BagItem bagItem = itemBagList.firstWhere(
-      (itemBag) => itemBag.medication == medication,
+  // increase
+  void increaseItemQuantity([BagItem bagItem]) {
+    if (bagItem != null) {
+      var newQuantity = state.bagItem.quantity + 1;
+      emit(
+        state.copyWith(
+          bagItem: state.bagItem.copyWith(
+            quantity: newQuantity,
+          ),
+          itemState: ItemState.initial,
+        ),
+      );
+      final List<BagItem> newBagItemList = [...state.bagItems];
+      int index = newBagItemList.indexOf(bagItem);
+      state.bagItem.copyWith(
+        quantity: state.bagItem.quantity,
+      );
+
+      newBagItemList[index] = state.bagItem;
+      emit(
+        state.copyWith(
+          bagItems: newBagItemList,
+          bagItem: state.bagItem,
+          itemState: ItemState.added,
+        ),
+      );
+
+      addItemToBag(state.bagItem.medication);
+    } else {
+      var newQuantity = state.bagItem.quantity + 1;
+      emit(
+        state.copyWith(
+          bagItem: state.bagItem.copyWith(
+            quantity: newQuantity,
+          ),
+          itemState: ItemState.initial,
+        ),
+      );
+    }
+  }
+
+  // decrease
+  void decreaseItemQuantity([BagItem bagItem]) {
+    if (bagItem != null) {
+      if (state.bagItem.quantity != 0) {
+        var newQuantity = state.bagItem.quantity - 1;
+        emit(
+          state.copyWith(
+            bagItem: state.bagItem.copyWith(
+              quantity: newQuantity,
+            ),
+            itemState: ItemState.initial,
+          ),
+        );
+        final List<BagItem> newBagItemList = [...state.bagItems];
+        int index = newBagItemList.indexOf(bagItem);
+        state.bagItem.copyWith(
+          quantity: state.bagItem.quantity,
+        );
+
+        newBagItemList[index] = state.bagItem;
+        emit(
+          state.copyWith(
+            bagItems: newBagItemList,
+            bagItem: state.bagItem,
+            itemState: ItemState.added,
+          ),
+        );
+
+        addItemToBag(state.bagItem.medication);
+      } else {
+        removeItemFromBag(bagItem);
+      }
+    } else {
+      if (state.bagItem.quantity >= 1) {
+        var newQuantity = state.bagItem.quantity - 1;
+        emit(
+          state.copyWith(
+            bagItem: state.bagItem.copyWith(
+              quantity: newQuantity,
+            ),
+            itemState: ItemState.initial,
+          ),
+        );
+      }
+    }
+  }
+
+  // remove
+  void removeItemFromBag(BagItem bagItem) {
+    List<BagItem> newBagItemList = [...state.bagItems];
+    final item = newBagItemList.firstWhere(
+      (element) => element.medication.name == bagItem.medication.name,
     );
-    itemBagList.remove(bagItem);
+
+    final int index = newBagItemList.indexOf(item);
+    newBagItemList.removeAt(index);
+
     emit(
       state.copyWith(
+        bagItems: newBagItemList,
         itemState: ItemState.removed,
-        bagItems: itemBagList,
       ),
     );
   }
 
-  void increaseItemQuanity(String productId) {}
-
-  void decreaseItemQuantity(String productId) {}
+  // get total price
+  int getTotalPrice() {
+    int totalPrice = 0;
+    for (BagItem bagItem in state.bagItems) {
+      totalPrice += bagItem.quantity * bagItem.medication.price;
+    }
+    return totalPrice;
+  }
 }

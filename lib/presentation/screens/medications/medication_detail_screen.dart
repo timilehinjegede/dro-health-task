@@ -152,7 +152,7 @@ class MedicationDetailScreen extends StatelessWidget {
                   textColor: whiteColor,
                   color: purpleColor,
                   onPressed: () {
-                    bagCubit.addToBag(medication);
+                    bagCubit.addItemToBag(medication);
                   },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.0),
@@ -266,12 +266,13 @@ class _PriceSection extends StatefulWidget {
 }
 
 class __PriceSectionState extends State<_PriceSection> {
-  BagCubit bagCubit;
+  BagCubit _bagCubit;
 
   @override
   void initState() {
     super.initState();
-    bagCubit = BlocProvider.of<BagCubit>(context);
+    _bagCubit = BlocProvider.of<BagCubit>(context);
+    _bagCubit.getBagItem(widget.medication);
   }
 
   @override
@@ -300,13 +301,13 @@ class __PriceSectionState extends State<_PriceSection> {
                   Icons.remove,
                   color: blackColor.withOpacity(.8),
                 ),
-                onPressed: bagCubit.decreaseQuantity,
+                onPressed: () => _bagCubit.decreaseItemQuantity(),
               ),
               SizedBox(
                 width: 20,
                 child: Center(
                   child: Text(
-                    bagCubit.state.quantity.toString(),
+                    _bagCubit.state.bagItem.quantity.toString(),
                   ),
                 ),
               ),
@@ -316,7 +317,7 @@ class __PriceSectionState extends State<_PriceSection> {
                   Icons.add,
                   color: blackColor.withOpacity(.8),
                 ),
-                onPressed: bagCubit.increaseQuantity,
+                onPressed: () => _bagCubit.increaseItemQuantity(),
               ),
             ],
           ),
@@ -328,7 +329,7 @@ class __PriceSectionState extends State<_PriceSection> {
         ),
         Spacer(),
         Text(
-          '\u{20A6}${widget.medication.price}',
+          formatMoney(widget.medication.price),
           style: theme.textTheme.bodyText1.copyWith(
             fontWeight: FontWeight.w600,
             fontSize: 18,

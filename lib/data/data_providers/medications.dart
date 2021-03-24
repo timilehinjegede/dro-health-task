@@ -44,7 +44,7 @@ class MedicationDataProvider {
       description: 'Folic Acid',
       type: 'Tablet - 5mg',
       imgSrc: folicAcid100,
-      price: 170,
+      price: 510,
       sellerName: 'Emzor P',
       packSize: '3x10',
       constituents: 'Folic',
