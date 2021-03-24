@@ -2,31 +2,34 @@
 
 DroHealth Task
 
+## APK
+Access and download the APK from [here](https://github.com/timilehinjegede/dro-health-task/tree/master/apk/)
+
 ##### Screenshots
 
 ## Home Screen
 
-![Home Screen](https://github.com/timilehinjegede/dro-health/blob/master/graphics/home.png)
+![Home Screen](https://github.com/timilehinjegede/dro-health-task/blob/master/graphics/home.png)
 
 ## Home Screen Search
 
-![Home Screen Search](https://github.com/timilehinjegede/dro-health/blob/master/graphics/home_search.png)
+![Home Screen Search](https://github.com/timilehinjegede/dro-health-task/blob/master/graphics/home_search.png)
 
 ## Medication Details Screen
 
-![Medication Details Screen](https://github.com/timilehinjegede/dro-health/blob/master/graphics/details.png)
+![Medication Details Screen](https://github.com/timilehinjegede/dro-health-task/blob/master/graphics/details.png)
 
 ## Added to Bag Screen
 
-![Added to Bag Screen](https://github.com/timilehinjegede/dro-health/blob/master/graphics/added_to_bag.png)
+![Added to Bag Screen](https://github.com/timilehinjegede/dro-health-task/blob/master/graphics/added_to_bag.png)
 
 ## Bag Screen
 
-![Bag Screen](https://github.com/timilehinjegede/dro-health/blob/master/graphics/bag.png)
+![Bag Screen](https://github.com/timilehinjegede/dro-health-task/blob/master/graphics/bag.png)
 
 ## Bag Options Screen
 
-![Bag Options Screen](https://github.com/timilehinjegede/dro-health/blob/master/graphics/bag_options.png)
+![Bag Options Screen](https://github.com/timilehinjegede/dro-health-task/blob/master/graphics/bag_options.png)
 
 ## Getting Started
 

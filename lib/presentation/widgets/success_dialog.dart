@@ -14,24 +14,26 @@ class SuccessDialog extends StatelessWidget {
     final theme = Theme.of(context);
     final bagCubit = BlocProvider.of<BagCubit>(context);
     return Container(
-      height: 300,
+      height: 255,
       color: transparentColor,
       padding: EdgeInsets.symmetric(horizontal: 20.0),
-      child: Column(
+      child: Stack(
         children: [
-          Container(
-            decoration: BoxDecoration(
-              color: whiteColor,
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                FractionalTranslation(
-                  translation: Offset(0, 0.8),
-                  child: Align(
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              height: 230,
+              decoration: BoxDecoration(
+                color: whiteColor,
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  YBox(5),
+                  Align(
                     child: Text(
                       'Successful',
                       style: theme.textTheme.bodyText1.copyWith(
@@ -39,36 +41,36 @@ class SuccessDialog extends StatelessWidget {
                       ),
                     ),
                   ),
-                ),
-                YBox(20),
-                Align(
-                  child: Text(
-                    '${bagCubit.state.bagItem.medication.name} has been ${isRemoved ? 'removed from' : 'added to'} your bag',
-                    style: theme.textTheme.bodyText1.copyWith(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
+                  YBox(10),
+                  Align(
+                    child: Text(
+                      '${bagCubit.state.bagItem.medication.name} has been ${isRemoved ? 'removed from' : 'added to'} your bag',
+                      style: theme.textTheme.bodyText1.copyWith(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
                   ),
-                ),
-                YBox(15),
-                _ActionButton(
-                  title: 'View Bag',
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                  },
-                ),
-                YBox(15),
-                _ActionButton(
-                  title: 'Done',
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ],
+                  YBox(15),
+                  _ActionButton(
+                    title: 'View Bag',
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
+                  ),
+                  YBox(15),
+                  _ActionButton(
+                    title: 'Done',
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              ),
             ),
           ),
-          FractionalTranslation(
-            translation: Offset(0, -4.4),
+          Align(
+            alignment: Alignment.topCenter,
             child: Container(
               height: 60,
               width: 60,

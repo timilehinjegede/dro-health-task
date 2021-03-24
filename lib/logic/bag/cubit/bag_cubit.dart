@@ -57,8 +57,8 @@ class BagCubit extends Cubit<BagState> {
   // add a bag item to the bag items list
   void addItemToBag(Medication med) {
     // check if the bag item exists in bag
-    final bool itemExists =
-        state.bagItems.any((item) => item.medication.productId == med.productId);
+    final bool itemExists = state.bagItems
+        .any((item) => item.medication.productId == med.productId);
 
     if (itemExists) {
       // check is the current quantity is not zero
@@ -202,7 +202,7 @@ class BagCubit extends Cubit<BagState> {
         // remove item from bag if thw quantity is equal to zero
         removeItemFromBag(bagItem);
       }
-    // decreasing the quantity from the medication details screen
+      // decreasing the quantity from the medication details screen
     } else {
       if (state.bagItem.quantity >= 1) {
         // decrease the quantity

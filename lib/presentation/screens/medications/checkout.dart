@@ -180,6 +180,7 @@ class __BagItemsSectionState extends State<_BagItemsSection> {
                     }
                   });
                 },
+                sIdx: _selectedIndex,
                 index: index,
                 isSelected: index == _selectedIndex,
               ),
@@ -197,6 +198,7 @@ class _BagItemEntry extends StatefulWidget {
   final VoidCallback onTap;
   final bool isSelected;
   final int index;
+  final int sIdx;
 
   const _BagItemEntry({
     Key key,
@@ -204,6 +206,7 @@ class _BagItemEntry extends StatefulWidget {
     this.onTap,
     this.isSelected,
     this.index,
+    this.sIdx,
   }) : super(key: key);
 
   @override
@@ -216,7 +219,18 @@ class __BagItemEntryState extends State<_BagItemEntry>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final _bagCubit = BlocProvider.of<BagCubit>(context);
-    return BlocBuilder<BagCubit, BagState>(
+    return BlocConsumer<BagCubit, BagState>(
+      listener: (context, state) {
+        switch (state.itemState) {
+          case ItemState.removed:
+            _bagCubit.getBagItem(widget.bagItem.medication);
+            break;
+          case ItemState.initial:
+            break;
+          case ItemState.added:
+            break;
+        }
+      },
       builder: (context, state) {
         return AnimatedContainer(
           duration: Duration(milliseconds: 300),
