@@ -33,8 +33,8 @@ class AllMedicationRepository {
   }
 
   // TODO: filter medications
-  List<Medication> filterAllMedications() {}
+  List<Medication> filterAllMedications() => [];
 
   // TODO: sort medications
-  List<Medication> sortAllMedications() {}
+  List<Medication> sortAllMedications() => [];
 }

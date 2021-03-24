@@ -1,4 +1,3 @@
-import 'package:dro_health/data/models/medication.dart';
 import 'package:dro_health/data/models/models.dart';
 import 'package:dro_health/logic/bag/cubit/bag_cubit.dart';
 import 'package:dro_health/utils/utils.dart';
@@ -13,134 +12,135 @@ class CheckOutContent extends StatelessWidget {
     final _bagCubit = BlocProvider.of<BagCubit>(context);
     return BlocBuilder<BagCubit, BagState>(
       builder: (context, state) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-          child: Column(
-            children: [
-              YBox(10),
-              Container(
-                height: 5,
-                width: 40,
-                decoration: BoxDecoration(
-                  color: whiteColor,
-                  borderRadius: BorderRadius.circular(5.0),
-                ),
-              ),
-              YBox(10),
-              Row(
-                children: [
-                  SvgPicture.asset(
-                    bag,
-                    height: 25,
-                    width: 25,
-                    fit: BoxFit.cover,
+        return SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            child: Column(
+              children: [
+                YBox(10),
+                Container(
+                  height: 5,
+                  width: 40,
+                  decoration: BoxDecoration(
                     color: whiteColor,
+                    borderRadius: BorderRadius.circular(5.0),
                   ),
-                  XBox(5),
-                  Text(
-                    'Bag',
-                    style: theme.textTheme.headline6.copyWith(
+                ),
+                YBox(10),
+                Row(
+                  children: [
+                    SvgPicture.asset(
+                      bag,
+                      height: 25,
+                      width: 25,
+                      fit: BoxFit.cover,
                       color: whiteColor,
                     ),
-                  ),
-                  Spacer(),
-                  InkWell(
-                    onTap: () {},
-                    borderRadius: BorderRadius.circular(45 / 2),
-                    child: Container(
-                      height: 45,
-                      width: 45,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
+                    XBox(5),
+                    Text(
+                      'Bag',
+                      style: theme.textTheme.headline6.copyWith(
                         color: whiteColor,
                       ),
-                      child: Center(
-                        child: Text(
-                          state.bagItems.length.toString(),
-                          style: theme.textTheme.bodyText1,
+                    ),
+                    Spacer(),
+                    InkWell(
+                      onTap: () {},
+                      borderRadius: BorderRadius.circular(45 / 2),
+                      child: Container(
+                        height: 45,
+                        width: 45,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: whiteColor,
+                        ),
+                        child: Center(
+                          child: Text(
+                            state.bagItems.length.toString(),
+                            style: theme.textTheme.bodyText1,
+                          ),
                         ),
                       ),
                     ),
+                  ],
+                ),
+                YBox(25),
+                Container(
+                  height: 22,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(11.0),
+                    color: whiteColor,
+                    boxShadow: [
+                      BoxShadow(
+                        offset: Offset(0, 4),
+                        color: blackColor.withOpacity(0.2),
+                        blurRadius: 5,
+                        spreadRadius: 2,
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              YBox(25),
-              Container(
-                height: 22,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(11.0),
-                  color: whiteColor,
-                  boxShadow: [
-                    BoxShadow(
-                      offset: Offset(0, 4),
-                      color: blackColor.withOpacity(0.2),
-                      blurRadius: 5,
-                      spreadRadius: 2,
+                  child: Center(
+                    child: Text(
+                      'Tap on an item for add, remove, delete options',
+                      style: theme.textTheme.caption.copyWith(
+                        color: blackColor,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+                YBox(25),
+                _BagItemsSection(
+                  bagItems: state.bagItems,
+                ),
+                Spacer(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Total',
+                      style: theme.textTheme.headline6.copyWith(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 22,
+                        color: whiteColor,
+                      ),
+                    ),
+                    Text(
+                      formatMoney(
+                        _bagCubit.getTotalPrice(),
+                      ),
+                      style: theme.textTheme.headline6.copyWith(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 22,
+                        color: whiteColor,
+                      ),
                     ),
                   ],
                 ),
-                child: Center(
-                  child: Text(
-                    'Tap on an item for add, remove, delete options',
-                    style: theme.textTheme.caption.copyWith(
-                      color: blackColor,
-                      fontWeight: FontWeight.w600,
+                YBox(15),
+                SizedBox(
+                  height: 50,
+                  width: double.infinity,
+                  child: RaisedButton(
+                    color: whiteColor,
+                    textColor: blackColor,
+                    onPressed: () {},
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                    child: Text(
+                      'Checkout',
+                      style: theme.textTheme.bodyText1.copyWith(
+                        color: blackColor,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              YBox(25),
-              _BagItemsSection(
-                bagItems: state.bagItems,
-              ),
-              Spacer(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Total',
-                    style: theme.textTheme.headline6.copyWith(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 22,
-                      color: whiteColor,
-                    ),
-                  ),
-                  Text(
-                    formatMoney(
-                      _bagCubit.getTotalPrice(),
-                    ),
-                    style: theme.textTheme.headline6.copyWith(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 22,
-                      color: whiteColor,
-                    ),
-                  ),
-                ],
-              ),
-              YBox(15),
-              SizedBox(
-                height: 50,
-                width: double.infinity,
-                child: RaisedButton(
-                  color: whiteColor,
-                  textColor: blackColor,
-                  onPressed: () {
-                    print(state.bagItems);
-                  },
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                  ),
-                  child: Text(
-                    'Checkout',
-                    style: theme.textTheme.bodyText1.copyWith(
-                      color: blackColor,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
-              Spacer(),
-            ],
+                Spacer(),
+              ],
+            ),
           ),
         );
       },

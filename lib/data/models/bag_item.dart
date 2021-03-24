@@ -1,7 +1,7 @@
 import 'package:dro_health/data/models/models.dart';
 import 'package:equatable/equatable.dart';
 
-class BagItem {
+class BagItem extends Equatable{
   const BagItem({
     this.medication,
     this.quantity ,
@@ -19,5 +19,8 @@ class BagItem {
       quantity: quantity ?? this.quantity,
     );
   }
+
+  @override
+  List<Object> get props => [medication, quantity];
 
 }

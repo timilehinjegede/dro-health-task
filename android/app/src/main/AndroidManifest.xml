@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.timilehinjegede.dro_health">
    <application
-        android:label="dro_health"
+        android:label="DroHealth"
         android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"

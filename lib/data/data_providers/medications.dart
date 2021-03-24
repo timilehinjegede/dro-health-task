@@ -13,7 +13,7 @@ class MedicationDataProvider {
       packSize: '3x10',
       constituents: 'Kezitil and Liquid',
       dispensedIn: 'Packs',
-      productId: 'PROBYVPW1',
+      productId: 'PROHKVPW0',
     ),
     const Medication(
       name: 'Kezitil',
@@ -25,7 +25,7 @@ class MedicationDataProvider {
       packSize: '3x10',
       constituents: 'Kezitil and Liquid',
       dispensedIn: 'Packs',
-      productId: 'PROBYVPW1',
+      productId: 'MBOBYVPW1',
     ),
     const Medication(
       name: 'Garlic Oil',
@@ -37,7 +37,7 @@ class MedicationDataProvider {
       packSize: '3x10',
       constituents: 'Garlic',
       dispensedIn: 'Packs',
-      productId: 'PROBYVPW1',
+      productId: 'JHWBYVPW2',
     ),
     const Medication(
       name: 'Folic Acid (100)',
@@ -49,7 +49,7 @@ class MedicationDataProvider {
       packSize: '3x10',
       constituents: 'Folic',
       dispensedIn: 'Packs',
-      productId: 'PROBYVPW1',
+      productId: 'FFLOYVPW3',
     ),
     const Medication(
       name: 'Folic Acid (1000)',
@@ -61,7 +61,7 @@ class MedicationDataProvider {
       packSize: '3x10',
       constituents: 'Folic',
       dispensedIn: 'Packs',
-      productId: 'PROBYVPW1',
+      productId: 'PPLJKVPW4',
     ),
     const Medication(
       name: 'Emitrim',
@@ -73,7 +73,7 @@ class MedicationDataProvider {
       packSize: '3x10',
       constituents: 'Emitrim Drops',
       dispensedIn: 'Packs',
-      productId: 'PROBYVPW1',
+      productId: 'PROGDHPW5',
     ),
     const Medication(
       name: 'Erythro Susp.',
@@ -85,7 +85,7 @@ class MedicationDataProvider {
       packSize: '3x10',
       constituents: 'Liquid Susp',
       dispensedIn: 'Packs',
-      productId: 'PROBYVPW1',
+      productId: 'PROBRTSW6',
     ),
     const Medication(
       name: 'Zolat',
@@ -97,7 +97,7 @@ class MedicationDataProvider {
       packSize: '3x10',
       constituents: 'Zolat',
       dispensedIn: 'Packs',
-      productId: 'PROBYVPW1',
+      productId: 'PRCVYVPW7',
     ),
   ];
 }

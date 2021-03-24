@@ -1,12 +1,9 @@
 import 'package:dro_health/data/repositories/all_medication_repositoty.dart';
-import 'package:dro_health/logic/all_medication/cubit/all_medication_cubit.dart';
-import 'package:dro_health/logic/bag/cubit/bag_cubit.dart';
-import 'package:dro_health/presentation/screens/medications/all_medication_screen.dart';
+import 'package:dro_health/presentation/screens/screens.dart';
 import 'package:dro_health/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'presentation/screens/medications/checkout.dart';
+import 'package:dro_health/logic/cubits.dart';
 
 void main() {
   runApp(MyApp());

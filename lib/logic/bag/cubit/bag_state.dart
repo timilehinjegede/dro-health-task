@@ -2,7 +2,7 @@ part of 'bag_cubit.dart';
 
 enum ItemState { initial, added, removed }
 
-class BagState {
+class BagState extends Equatable{
   final ItemState itemState;
   final BagItem bagItem;
   final List<BagItem> bagItems;
@@ -24,4 +24,8 @@ class BagState {
       bagItems: bagItems ?? this.bagItems,
     );
   }
+
+  @override
+  List<Object> get props => [itemState, bagItem, bagItems];
+  
 }

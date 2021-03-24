@@ -1,10 +1,10 @@
 import 'package:dro_health/data/models/models.dart';
-import 'package:dro_health/logic/bag/cubit/bag_cubit.dart';
 import 'package:dro_health/presentation/widgets/widgets.dart';
 import 'package:dro_health/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:dro_health/logic/cubits.dart';
 
 class MedicationDetailScreen extends StatelessWidget {
   final Medication medication;
@@ -15,60 +15,20 @@ class MedicationDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bagCubit = BlocProvider.of<BagCubit>(context);
+    final _bagCubit = BlocProvider.of<BagCubit>(context);
     final theme = Theme.of(context);
     return BlocConsumer<BagCubit, BagState>(
       listener: (context, state) {
         switch (state.itemState) {
           case ItemState.initial:
-            // TODO: Handle this case.
             break;
           case ItemState.added:
-            showGeneralDialog(
-              context: context,
-              barrierDismissible: true,
-              barrierLabel: 'label',
-              transitionDuration: Duration(milliseconds: 500),
-              pageBuilder: (_, __, ___) => Dialog(
-                backgroundColor: Colors.transparent,
-                elevation: 0.0,
-                insetPadding: EdgeInsets.symmetric(horizontal: 20),
-                child: SuccessDialog(),
-              ),
-              transitionBuilder: (_, anim, __, child) {
-                return SlideTransition(
-                  position: Tween(begin: Offset(0, 1), end: Offset(0, 0))
-                      .animate(anim),
-                  child: child,
-                );
-              },
-            );
+            buildItemAddedDialog(context);
             break;
           case ItemState.removed:
-            showGeneralDialog(
-              context: context,
-              barrierDismissible: true,
-              barrierLabel: 'label',
-              transitionDuration: Duration(milliseconds: 500),
-              pageBuilder: (_, __, ___) => Dialog(
-                backgroundColor: Colors.transparent,
-                elevation: 0.0,
-                insetPadding: EdgeInsets.symmetric(horizontal: 20),
-                child: SuccessDialog(
-                  isRemoved: true,
-                ),
-              ),
-              transitionBuilder: (_, anim, __, child) {
-                return SlideTransition(
-                  position: Tween(begin: Offset(0, 1), end: Offset(0, 0))
-                      .animate(anim),
-                  child: child,
-                );
-              },
-            );
+            buildItemAddedDialog(context, true);
             break;
         }
-        // TODO: implement listener
       },
       builder: (context, state) {
         return Scaffold(
@@ -142,37 +102,10 @@ class MedicationDetailScreen extends StatelessWidget {
               ),
             ],
           ),
-          bottomNavigationBar: SafeArea(
-            bottom: true,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30.0),
-              child: SizedBox(
-                height: 50,
-                child: RaisedButton(
-                  textColor: whiteColor,
-                  color: purpleColor,
-                  onPressed: () {
-                    bagCubit.addItemToBag(medication);
-                  },
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset(
-                        bag,
-                        color: whiteColor,
-                      ),
-                      XBox(5),
-                      Text(
-                        'Add to bag',
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+          bottomNavigationBar: AddItemToBagButton(
+            onPressed: () {
+              _bagCubit.addItemToBag(medication);
+            },
           ),
         );
       },
@@ -329,7 +262,9 @@ class __PriceSectionState extends State<_PriceSection> {
         ),
         Spacer(),
         Text(
-          formatMoney(widget.medication.price),
+          formatMoney(
+            widget.medication.price * _bagCubit.state.bagItem.quantity,
+          ),
           style: theme.textTheme.bodyText1.copyWith(
             fontWeight: FontWeight.w600,
             fontSize: 18,

@@ -33,7 +33,7 @@ class AllMedicationCubit extends Cubit<AllMedicationState> {
 
   Future<void> searchAllMedications(String medicationName) async {
     try {
-      final medications = await allMedicationRepository.searchAllMedications(
+      final medications = allMedicationRepository.searchAllMedications(
         medicationName: medicationName,
       );
 
@@ -52,7 +52,9 @@ class AllMedicationCubit extends Cubit<AllMedicationState> {
     }
   }
 
-  Future<void> filterAllMedications() {}
+  // TODO: filter medications
+  void filterAllMedications() {}
 
-  Future<void> sortAllMedications() {}
+  // TODO: sort medications
+  void sortAllMedications() {}
 }

@@ -43,7 +43,7 @@ class SuccessDialog extends StatelessWidget {
                 YBox(20),
                 Align(
                   child: Text(
-                    '${bagCubit.state.bagItem.medication.name} has been ${isRemoved ? 'removed' : 'added'} to your bag',
+                    '${bagCubit.state.bagItem.medication.name} has been ${isRemoved ? 'removed from' : 'added to'} your bag',
                     style: theme.textTheme.bodyText1.copyWith(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,

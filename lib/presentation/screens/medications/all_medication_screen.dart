@@ -1,11 +1,12 @@
 import 'package:dro_health/data/models/models.dart';
-import 'package:dro_health/logic/all_medication/cubit/all_medication_cubit.dart';
-import 'package:dro_health/presentation/screens/medications/checkout.dart';
-import 'package:dro_health/presentation/screens/medications/medication_detail_screen.dart';
+import 'package:dro_health/presentation/screens/screens.dart';
+import 'package:dro_health/presentation/widgets/widgets.dart';
 import 'package:dro_health/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:sliding_sheet/sliding_sheet.dart';
+import 'package:dro_health/logic/cubits.dart';
 
 class AllMedicationScreen extends StatefulWidget {
   @override
@@ -21,7 +22,6 @@ class _AllMedicationScreenState extends State<AllMedicationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Scaffold(
       body: BlocBuilder<AllMedicationCubit, AllMedicationState>(
         builder: (context, state) {
@@ -58,9 +58,21 @@ class _BuildHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Stack(
-      children: [
-        SafeArea(
+    return SafeArea(
+      bottom: false,
+      child: SlidingSheet(
+        elevation: 5,
+        cornerRadius: 30,
+        addTopViewPaddingOnFullscreen: true,
+        color: darkPurpleColor,
+        snapSpec: const SnapSpec(
+          snap: true,
+          snappings: [0.1, 1],
+        ),
+        builder: (context, state) {
+          return CheckOutContent();
+        },
+        body: SafeArea(
           child: Column(
             children: [
               YBox(10),
@@ -88,31 +100,7 @@ class _BuildHome extends StatelessWidget {
             ],
           ),
         ),
-        DraggableScrollableSheet(
-          initialChildSize: 0.145,
-          minChildSize: 0.145,
-          builder: (_, scrollController) {
-            return SafeArea(
-              bottom: false,
-              child: SingleChildScrollView(
-                controller: scrollController,
-                child: Container(
-                  height: MediaQuery.of(context).size.height,
-                  decoration: BoxDecoration(
-                    color: darkPurpleColor,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30.0),
-                      topRight: Radius.circular(30.0),
-                    ),
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 15.0),
-                  child: CheckOutContent(),
-                ),
-              ),
-            );
-          },
-        ),
-      ],
+      ),
     );
   }
 }
@@ -124,10 +112,9 @@ class _HeaderSection extends StatefulWidget {
 
 class __HeaderSectionState extends State<_HeaderSection>
     with TickerProviderStateMixin {
-  bool isOpen = true;
+  bool isOpen = false;
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -164,35 +151,16 @@ class __HeaderSectionState extends State<_HeaderSection>
                     YBox(10),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                      child: TextField(
-                        onChanged: (String val) {
+                      child: CustomTextField(
+                        onChanged: (value) {
                           context.read<AllMedicationCubit>()
-                            ..searchAllMedications(val);
+                            ..searchAllMedications(value);
                         },
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.search,
-                          ),
-                          suffixIcon: InkWell(
-                            borderRadius: BorderRadius.circular(20.0),
-                            onTap: () {
-                              setState(() {
-                                isOpen = !isOpen;
-                              });
-                            },
-                            child: Icon(
-                              Icons.close,
-                            ),
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                            borderSide: BorderSide(
-                              width: 1,
-                              color: greyColor,
-                            ),
-                          ),
-                          isDense: true,
-                        ),
+                        onTap: () {
+                          setState(() {
+                            isOpen = !isOpen;
+                          });
+                        },
                       ),
                     ),
                   ],
@@ -359,7 +327,7 @@ class _ActionButton extends StatelessWidget {
         child: Center(
           child: SvgPicture.asset(
             assetSrc,
-            color: blackColor.withOpacity(0.8),
+            color: blackColor.withOpacity(0.7),
           ),
         ),
       ),
