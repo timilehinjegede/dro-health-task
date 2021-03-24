@@ -8,28 +8,22 @@ Access and download the APK from [here](https://github.com/timilehinjegede/dro-h
 ##### Screenshots
 
 ## Home Screen
-
-![Home Screen](https://github.com/timilehinjegede/dro-health-task/blob/master/graphics/home.png)
+<img src="/graphics/home.png" height="600em" />
 
 ## Home Screen Search
-
-![Home Screen Search](https://github.com/timilehinjegede/dro-health-task/blob/master/graphics/home_search.png)
+<img src="/graphics/home_search.png" height="600em" />
 
 ## Medication Details Screen
-
-![Medication Details Screen](https://github.com/timilehinjegede/dro-health-task/blob/master/graphics/details.png)
+<img src="/graphics/details.png" height="600em" />
 
 ## Added to Bag Screen
-
-![Added to Bag Screen](https://github.com/timilehinjegede/dro-health-task/blob/master/graphics/added_to_bag.png)
+<img src="/graphics/added_to_bag.png" height="600em" />
 
 ## Bag Screen
-
-![Bag Screen](https://github.com/timilehinjegede/dro-health-task/blob/master/graphics/bag.png)
+<img src="/graphics/bag.png" height="600em" />
 
 ## Bag Options Screen
-
-![Bag Options Screen](https://github.com/timilehinjegede/dro-health-task/blob/master/graphics/bag_options.png)
+<img src="/graphics/bag_options.png" height="600em" />
 
 ## Getting Started
 
